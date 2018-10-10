@@ -1,0 +1,120 @@
+﻿.green-bg {
+    background-color: #0da58e;
+}
+
+.lightgreen-bg {
+    background-color: #8cc152;
+}
+
+.lime-bg {
+    background-color: #cdda49;
+}
+
+.yellow-bg {
+    background-color: #fdc02f;
+}
+
+.orange-bg {
+    background-color: #fd9727;
+}
+
+.deeporange-bg {
+    background-color: #fc5830;
+}
+
+.red-bg {
+    background-color: #e2202c;
+}
+
+.pink-bg {
+    background-color: #e62565;
+}
+
+.purple-bg {
+    background-color: #9b2fae;
+}
+
+.deeppurple-bg {
+    background-color: #673fb4;
+}
+
+.blue-bg {
+    background-color: #4054b2;
+}
+
+.lightblue-bg {
+    background-color: #587bf8;
+}
+
+.colorpicker {
+    font-size: 0;
+    padding: 0;
+}
+
+    .colorpicker li {
+        display: inline-block;
+        width: 8.33333333%;
+        height: 50px;
+        position: relative;
+        color: #fff;
+        cursor: pointer;
+    }
+
+        .colorpicker li span {
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            padding-top: 11px;
+            pointer-events: none;
+        }
+
+            .colorpicker li span:before {
+                opacity: 0;
+            }
+
+        .colorpicker li.selected span:before {
+            opacity: 1;
+        }
+
+        .colorpicker li:hover span:before {
+            opacity: 0.5;
+        }
+
+li {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 20px;
+    line-height: 1;
+    font-family: FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+    li:after {
+        transition: left 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.2s 1s;
+        content: "";
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        position: absolute;
+        left: 120%;
+        top: 0;
+        opacity: 0;
+        line-height: 50px;
+        content: "\f00c";
+    }
+
+    li.active:after {
+        left: 0;
+        opacity: 1;
+        transition: left 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.2s;
+    }
+
+    li.active ~ li:after {
+        left: -80%;
+    }

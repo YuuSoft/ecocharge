@@ -1,0 +1,127 @@
+﻿@using Models
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "EcoSense";
+
+    PagedList.IPagedList<EcoSense> lista = (PagedList.IPagedList<EcoSense>)ViewData["ListaEcoSense"];
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 text-center" style="margin-top: 3%;">
+            <h2>Seus EcoSenses</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-sm-10 col-md-8 col-lg-8 text-right">
+            @using (Html.BeginForm())
+            {
+                @("Procurar Por Nome: ") @Html.TextBox("SearchString", null, new { @class = "" })
+                <button type="submit" class="btn btn-raised btn-primary" value="Pesquisar"><span class="d-none d-md-block d-xl-block">Pesquisar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-search"></i></span></button>
+            }
+        </div>
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-sm-10 col-md-8 col-lg-8 text-center">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Númeração</th>
+                        <th scope="col"><a href="@Url.Action("Index", "EcoSense", new { sortOrder = ViewBag.NameSortParm })">Serial</a></th>
+                        <th scope="col"><button type="button" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#modalEcoSense"><span class="d-none d-md-block d-xl-block">Adicionar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-plus"></i></span></button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (lista != null)
+                    {
+                        int i = 1;
+                        foreach (var ecosense in lista)
+                        {
+                            <tr>
+                                <th scope="row">@i</th>
+                                <td>@ecosense.SerialAparelho.Serial</td>
+                                <td>
+                                        --
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <br />
+                Page @(lista.PageCount < lista.PageNumber ? 0 : lista.PageNumber) of @lista.PageCount
+
+                @Html.PagedListPager(lista, page => Url.Action("Index", 
+                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Modal -->
+            <div class="modal fade" id="modalEcoSense" tabindex="-1" role="dialog" aria-labelledby="modalEcoSenseLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        @using (Ajax.BeginForm("Cadastrar", "EcoSense", null, new AjaxOptions() { OnComplete = "OnComplete" }))
+                        {
+                            <input type="hidden" id="id" name="id" value="0" />
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalEcoSenseLabel">Cadastre um cômodo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <center>
+                                    <div class="page">
+                                        <div class="page__demo">
+                                            <label class="field a-field a-field_a1 page__field">
+                                                <input class="field__input" placeholder="123456789ABC" name="SerialAparelho.Serial" id="serial" required>
+                                                <span class="field__label-wrap">
+                                                    <span class="field__label">Serial</span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </center>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function OnComplete(response) {
+        var obj = response.responseJSON;
+
+        alert(obj.Msg);
+
+        if (obj.Success) {
+            $('#modalEcoSense').modal('hide');
+            window.location = "@Url.Action("Index", "EcoSense")";
+        }
+
+    }
+
+    function openModal()
+    {
+        document.getElementById("id").value = 0
+        document.getElementById("serial").value = "";
+        $('#modalEcoSense').modal('show');
+    }
+
+</script>

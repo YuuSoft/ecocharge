@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Página Inicial";
+}
+
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,400,700'>
+<link href="~/Content/css/style_card_flip.css" rel="stylesheet" />
+
+<!--CARD FLIP-->
+<div class="content">
+    <a class="card" href="/EcoSense/">
+        <div class="front" style="background-image: url('/Content/img/leandro_chave.png');">
+            <p>Ecosense</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Cadastre e ative seu Ecosense!</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a><a class="card" href="/Comodo/">
+        <div class="front" style="background-image: url('/Content/img/comodo.png');">
+            <p>Seus Comodos</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Crie todos os comodos de sua residencia!</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a><a class="card" href="#!">
+        <div class="front" style="background-image: url('/Content/img/monitor.png');">
+            <p>Seus Aparelhos</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Crie e configure seus aparelhos!</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a><a class="card" href="#!">
+        <div class="front" style="background-image: url('/Content/img/estatisticas.png');">
+            <p>Estatisticas</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Monitore seu consumo aqui, veja as estastiticas monitoradas!</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a><a class="card" href="#!">
+        <div class="front" style="background-image: url('/Content/img/tarifa.png');">
+            <p>Tarifa</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Configure seus parametros de acordo com sua distribuidora de energia!</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a><a class="card" href="#!">
+        <div class="front" style="background-image: url('/Content/img/ajuda.png');">
+            <p>Ajuda</p>
+        </div>
+        <div class="back">
+            <div>
+                <p>Tem uma duvida? tire com conosco.</p>
+                <button class="button">Click Aqui</button>
+            </div>
+        </div>
+    </a>
+</div>
+<!--CARD FLIP-->
+
+<script>
+    var detect_OS_set_HTML_class = (function () { "use strict"; var html = document.documentElement; var userAgent = navigator.userAgent || navigator.vendor || window.opera; if (/windows phone/i.test(userAgent)) { return "Windows" } if (/android/i.test(userAgent)) { html.className += " os_Android"; return "Android" } if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) { html.className += " os_iOS"; return "iOS" } return "Unknown" })(); const fake_OS_detection_set_HTML_class_from_button = (function () { "use strict"; const class_iOS = "os_iOS"; const class_Android = "os_Android"; const html = document.documentElement; const buttons = document.querySelectorAll("[class*=fake_btn]"); if (!buttons) return false; const resetHTMLClass = () => { html.classList.remove(class_iOS, class_Android) }; const setHTMLClass = (btn, clss, is_os) => { if (btn.className.match(clss)) { if (!is_os) { html.classList.add(clss) } } }; const fakeBtnClick = (event) => { const btn = event.target; const is_iOS = html.classList.contains(class_iOS); const is_Android = html.classList.contains(class_Android); resetHTMLClass(); setHTMLClass(btn, class_iOS, is_iOS); setHTMLClass(btn, class_Android, is_Android) }; for (let btn of buttons) { btn.addEventListener("click", fakeBtnClick) } })();
+</script>

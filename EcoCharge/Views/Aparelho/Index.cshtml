@@ -1,0 +1,221 @@
+﻿@using Models
+
+@{
+    ViewBag.Title = "Aparelho";
+}
+
+<link src="~/Content/css/selectbox.css" />
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 text-center" style="margin-top: 3%;">
+            <h2>Seus Aparelhos</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-sm-10 col-md-8 col-lg-8 text-right">
+
+        </div>
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+        <div class="col-sm-10 col-md-8 col-lg-8 text-center">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Númeração</th>
+                        <th scope="col">Aparelho</th>
+                        <th scope="col"><button type="button" class="btn btn-raised btn-primary" data-toggle="modal" data-target="#modalAparelho"><span class="d-none d-md-block d-xl-block">Adicionar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-plus"></i></span></button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var aparelho in Model)
+                        {
+                            <tr>
+                                <th scope="row">1</th>
+                                <td></td>
+                                <td>
+                                    <div class="btn-group" style="margin: unset;">
+                                        <button type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="d-none d-md-block d-xl-block">Opções</span>
+                                            <span class="d-block d-md-none d-xl-none"><i class='fa fa-ellipsis-v'></i></span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <input type="hidden" id="id" name="id" value="" />
+                                            <a class="dropdown-item" href="#">Editar Aparelho</a>
+                                            <a class="dropdown-item" href="#">Remover Aparelho</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Modal -->
+            <div class="modal fade" id="modalComodo" tabindex="-1" role="dialog" aria-labelledby="modalComodoLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        @using (Ajax.BeginForm("Cadastrar", "Aparelho", null, new AjaxOptions() { OnComplete = "OnComplete" }))
+                        {
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalComodoLabel">Cadastre um cômodo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <center>
+                                    <div class="page">
+                                        <div class="page__demo">
+                                            <label class="field a-field a-field_a1 page__field">
+                                                <input class="field__input" placeholder="Cômodo" name="nome" id="nome" required>
+                                                <span class="field__label-wrap">
+                                                    <span class="field__label">Nome do aparelho</span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="sel sel--black-panther">
+                                        <select name="select-profession" id="select-profession">
+                                            <option value="" disabled>Serials Ecosense</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <div class="sel sel--black-panther">
+                                        <select name="select-profession" id="select-profession">
+                                            <option value="" disabled>Cômodos</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <div class='toggle' id='switch'>
+                                        <div class='toggle-text-off'>127V</div>
+                                        <div class='glow-comp'></div>
+                                        <div class='toggle-button'></div>
+                                        <div class='toggle-text-on'>220V</div>
+                                    </div>
+                                    <ul class="colorpicker">
+                                        <li class="green-bg"></li>
+                                        <li class="lightgreen-bg"></li>
+                                        <li class="lime-bg"></li>
+                                        <li class="yellow-bg"></li>
+                                        <li class="orange-bg active"></li>
+                                        <li class="deeporange-bg"></li>
+                                        <li class="red-bg"></li>
+                                        <li class="pink-bg"></li>
+                                        <li class="purple-bg"></li>
+                                        <li class="deeppurple-bg"></li>
+                                        <li class="blue-bg"></li>
+                                        <li class="lightblue-bg"></li>
+                                    </ul>
+                                </center>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    /*COLORPICKER*/
+    $('li').click(function () {
+        $('li').removeClass('active');
+        $(this).addClass('active');
+    });
+
+    function demo() {
+        setTimeout(function () {
+            $("li:nth-child(6)").trigger('click');
+        }, 1500);
+        setTimeout(function () {
+            $("li:nth-child(12)").trigger('click');
+        }, 2000);
+        setTimeout(function () {
+            $("li:nth-child(11)").trigger('click');
+        }, 2500);
+    }
+    if (document.location.pathname.indexOf('fullcpgrid') > -1) {
+        demo();
+    }
+    /*AS CONFIGURACOES DOS SWICTH*/
+    $('.toggle').click(function (e) {
+        e.preventDefault(); // The flicker is a codepen thing
+        $(this).toggleClass('toggle-on');
+    });
+
+    /*AS CONFIGURACOES DOS SELECT BOX*/
+    /* ===== Logic for creating fake Select Boxes ===== */
+    $('.sel').each(function () {
+        $(this).children('select').css('display', 'none');
+
+        var $current = $(this);
+
+        $(this).find('option').each(function (i) {
+            if (i == 0) {
+                $current.prepend($('<div>', {
+                    class: $current.attr('class').replace(/sel/g, 'sel__box')
+                }));
+
+                var placeholder = $(this).text();
+                $current.prepend($('<span>', {
+                    class: $current.attr('class').replace(/sel/g, 'sel__placeholder'),
+                    text: placeholder,
+                    'data-placeholder': placeholder
+                }));
+
+                return;
+            }
+
+            $current.children('div').append($('<span>', {
+                class: $current.attr('class').replace(/sel/g, 'sel__box__options'),
+                text: $(this).text()
+            }));
+        });
+    });
+
+    // Toggling the `.active` state on the `.sel`.
+    $('.sel').click(function () {
+        $(this).toggleClass('active');
+    });
+
+    // Toggling the `.selected` state on the options.
+    $('.sel__box__options').click(function () {
+        var txt = $(this).text();
+        var index = $(this).index();
+
+        $(this).siblings('.sel__box__options').removeClass('selected');
+        $(this).addClass('selected');
+
+        var $currentSel = $(this).closest('.sel');
+        $currentSel.children('.sel__placeholder').text(txt);
+        $currentSel.children('select').prop('selectedIndex', index + 1);
+    });
+
+
+</script>
