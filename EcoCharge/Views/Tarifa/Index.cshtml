@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Tarifa";
+}
+
+<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+<link href="~/Content/css/ajuda.css" rel="stylesheet" />
+
+<div class="container text-center justify-content-md-center">
+    <div class="col-sm-12" style="margin-top: 3%;">
+        <a href="@Url.Action("Index", "Tarifa")"><h2 style="font-weight: bold;">Tarifa</h2></a>
+    </div>
+
+    <div class="col-sm-12">
+
+        <div class="accordion" style="margin-bottom: 5%;">
+            <div class="accordion-item">
+                <a>Que Tarifa é essa?</a>
+                <div class="content">
+                    <p>As Empresas de distribuição de energia cobram do cliente uma tarifa sobre a energia distribuida, porem essa tarifa pode variar dependendo da quantidade utilizada de energia no més ou habitação (Residencia, industria ou rural) que utiliza o serviço.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <a>Media das tarifas Cobradas em residencias</a>
+                <div class="content">
+                    <img class="img-fluid" src="~/Content/img/taxaresidencial.PNG" />
+                </div>
+            </div>
+            <div class="accordion-item">
+                <a>Onde achar o preço da tarifa na conta de luz?</a>
+                <div class="content">
+                    <img class="img-fluid" src="~/Content/img/fatura_lis.jpg" />
+                    <p>*Detalhamento de tarifa cobrada.</p>
+                    <p>*Verificar o consumo para retira a tarifa.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <a>O valor do aplicativo esta muito diferente do valor da minha conta</a>
+                <div class="content">
+                    <p>Nossos cálculos são baseados nas configurações passadas pelo usuário, se acaso os valores estiverem muito diversos verifique a tarifa inserida ou entre em contato com o nosso suporte.</p>
+                </div>
+            </div>
+            <a>Taxas de Serviços</a>
+            <div class="content">
+                <p>O sistema não adiciona a taxa extra de servicos cobradas pela distribuidora.</p>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-raised btn-primary" onclick="openModal()"><span style="font-weight: bold;" class="d-none d-md-block d-xl-block">Insira sua Tarifa aqui!</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-plus"></i></span></button>
+
+    </div>
+
+
+</div>
+
+<div class="col-sm-12">
+    <!-- Modal -->
+    <div class="modal fade" id="modalTarifa" tabindex="-1" role="dialog" aria-labelledby="modalComodoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="/Tarifa/Cadastrar" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="id" name="id" value="0" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalComodoLabel">Insira sua Tarifa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <center>
+                            <div class="page">
+                                <div class="page__demo">
+                                    <label class="field a-field a-field_a1 page__field">
+                                        <input class="field__input" placeholder="0,213" name="tarifa" id="tarifa" required value="@ViewBag.Tarifa">
+                                        <span class="field__label-wrap">
+                                            <span class="field__label">Valor da tarifa</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const items = document.querySelectorAll(".accordion a");
+
+    function toggleAccordion() {
+        this.classList.toggle('active');
+        this.nextElementSibling.classList.toggle('active');
+    }
+
+    items.forEach(item => item.addEventListener('click', toggleAccordion));
+
+    function openModal()
+    {
+        $('#modalTarifa').modal('show');
+    }
+
+</script>
+
+<style>
+    a:hover {
+        text-decoration: none;
+    }
+</style>

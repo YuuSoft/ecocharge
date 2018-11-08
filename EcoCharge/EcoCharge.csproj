@@ -70,12 +70,21 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.6\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -168,13 +177,17 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BLL\Factory\Factory.cs" />
     <Compile Include="BLL\Filter\LogActionFilter.cs" />
     <Compile Include="BLL\Interfaces\IFactory.cs" />
     <Compile Include="BLL\Interfaces\IService.cs" />
     <Compile Include="BLL\Service\Service.cs" />
     <Compile Include="BLL\Utils\PasswordHash.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AgendamentoController.cs" />
+    <Compile Include="Controllers\AjudaController.cs" />
     <Compile Include="Controllers\AparelhoController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ComodoController.cs" />
@@ -182,6 +195,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PainelController.cs" />
     <Compile Include="Controllers\EcosenseController.cs" />
+    <Compile Include="Controllers\TarifaController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="DAL\DAO\DataAccessObject.cs" />
     <Compile Include="BLL\Interfaces\IDataAccessObject.cs" />
     <Compile Include="DAL\DB\AccessDB.cs" />
@@ -199,6 +214,7 @@
     <Compile Include="Models\SerialAparelho.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebAPI\ConsumoController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\bootstrap-material.css" />
@@ -209,8 +225,10 @@
     <Content Include="Content\css\error.css" />
     <Content Include="Content\css\salvar.css" />
     <Content Include="Content\css\style.css" />
-    <Content Include="Content\css\selectbox.css" />
+    <Content Include="Content\css\ajuda.css" />
     <Content Include="Content\css\colorpicker.css" />
+    <Content Include="Content\css\StyleSheet1.css" />
+    <Content Include="Content\css\ajuda2.css" />
     <Content Include="Content\css\style_app.css" />
     <Content Include="Content\css\style_card_flip.css" />
     <Content Include="Content\css\style_input.css" />
@@ -229,27 +247,31 @@
     <Content Include="Content\images\IMG-20180525-WA0000.jpg" />
     <Content Include="Content\images\IMG-20180616-WA0006.jpg" />
     <Content Include="Content\images\IMG-20180616-WA0007.jpg" />
-    <Content Include="Content\img\ajuda.png" />
+    <Content Include="Content\img\alarm.png" />
     <Content Include="Content\img\butao.png" />
-    <Content Include="Content\img\comodo.png" />
-    <Content Include="Content\img\CORES DA LOGO.png" />
-    <Content Include="Content\img\estatisticas.png" />
-    <Content Include="Content\img\google_play.png" />
+    <Content Include="Content\img\fatura_lis.jpg" />
+    <Content Include="Content\img\home.png" />
     <Content Include="Content\img\icone_branco.png" />
     <Content Include="Content\img\icone_branco_fundo_colorido.png" />
     <Content Include="Content\img\icone_colorido.png" />
     <Content Include="Content\img\icone_logo_branca.png" />
     <Content Include="Content\img\icone_logo_colorido.png" />
     <Content Include="Content\img\icon_logo_branco_fundo_colorido.png" />
-    <Content Include="Content\img\leandro_chave.png" />
+    <Content Include="Content\img\key.png" />
     <Content Include="Content\img\logo_slogam_icone_branco.png" />
     <Content Include="Content\img\logo_slogam_icone_colorido.png" />
-    <Content Include="Content\img\menu_app.png" />
     <Content Include="Content\img\monitor.png" />
-    <Content Include="Content\img\sobre.png" />
-    <Content Include="Content\img\tarifa.png" />
-    <Content Include="Content\img\terceira.png" />
-    <Content Include="Content\img\welcome_app.png" />
+    <Content Include="Content\img\pie-chart.png" />
+    <Content Include="Content\img\piggy-bank.png" />
+    <Content Include="Content\img\question.png" />
+    <Content Include="Content\img\slide2.png" />
+    <Content Include="Content\img\slide3.png" />
+    <Content Include="Content\img\slide4.png" />
+    <Content Include="Content\img\slide5.png" />
+    <Content Include="Content\img\taxaresidencial.PNG" />
+    <Content Include="Content\img\slide1.png" />
+    <Content Include="Content\img\user.png" />
+    <Content Include="Content\js\ajuda.js" />
     <Content Include="Content\js\main.js" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\vendor\animate\animate.css" />
@@ -291,7 +313,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\img\EcoCharge App.xd" />
     <Content Include="Content\scss\style_app.scss" />
     <Content Include="Content\scss\style_card_flip.scss" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap-grid.css.map" />
@@ -355,6 +376,7 @@
     <Content Include="Content\fonts\poppins\Poppins-SemiBoldItalic.ttf" />
     <Content Include="Content\fonts\poppins\Poppins-Thin.ttf" />
     <Content Include="Content\fonts\poppins\Poppins-ThinItalic.ttf" />
+    <Content Include="Content\scss\ajuda.scss" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\index_login.js" />
@@ -371,6 +393,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\js.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\swiper.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -390,6 +413,26 @@
     <Content Include="Views\Painel\Index.cshtml" />
     <Content Include="Views\Comodo\Index.cshtml" />
     <Content Include="Views\Aparelho\Index.cshtml" />
+    <Content Include="Views\Tarifa\Index.cshtml" />
+    <Content Include="Views\Account\Senha.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Admin\Usuarios.cshtml" />
+    <Content Include="Views\Admin\Comodos.cshtml" />
+    <Content Include="Views\Admin\Aparelhos.cshtml" />
+    <Content Include="Views\Admin\Seriais.cshtml" />
+    <Content Include="Views\Admin\Medidores.cshtml" />
+    <Content Include="Views\Admin\Logs.cshtml" />
+    <Content Include="Views\Admin\UsuariosModal.cshtml" />
+    <Content Include="Views\Admin\SeriaisModal.cshtml" />
+    <Content Include="Views\Admin\MedidoresModal.cshtml" />
+    <Content Include="Views\Admin\ComodosModal.cshtml" />
+    <Content Include="Views\Admin\AparelhosModal.cshtml" />
+    <Content Include="Views\Error\NotAccess.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Agendamento\Index.cshtml" />
+    <Content Include="Views\Ajuda\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

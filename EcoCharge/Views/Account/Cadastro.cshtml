@@ -6,43 +6,17 @@
     Layout = null;
 }
 
-@*<script>
-
-        function Verificar() {
-
-            console.log("Verificado!");
-
-            return true;
-        }
-
-        function UsuarioLogado(response) {
-            console.log(response);
-        }
-
-    </script>
-
-    @using(Ajax.BeginForm("RealizarLogin", "Account", null, new AjaxOptions() { OnBegin = "Verificar", OnComplete = "UsuarioLogado" })) {
-
-    <label for="username">username</label>
-    <input type="text" name="username" />
-
-    @Html.LabelFor(model => model.password)
-    @Html.TextBoxFor(model => model.password, new { @id="", @class = "classeCSS" })
-
-    <button type="submit">BUTAO</button>
-
-    <div id="DivAlvo">@Session["userEmail"]</div>
-
-    <a href="@Url.Action("Index","Home")">linkq</a>
-    }*@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Cadastro</title>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="360343055425-nfviteha6jqrhn7a0a9i48fn046tg62p.apps.googleusercontent.com">
+
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="/Content/images/icons/tomada.ico" />
     <!--===============================================================================================-->
@@ -65,19 +39,43 @@
     <link rel="stylesheet" type="text/css" href="/Content/css/util.css">
     <link rel="stylesheet" type="text/css" href="/Content/css/main.css">
     <!--===============================================================================================-->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
+
+    @{
+        var erro = TempData["Erro"];
+        var sucesso = TempData["Sucesso"];
+
+        if (erro != null)
+        {
+            if ((bool)erro == true)
+            {
+                <div id="mensagem_alerta" class="alert alert-danger" role="alert" style="bottom: 0;margin-left: 8px;position:absolute !important;">
+                    @TempData["Mensagem"];
+                </div>
+            }
+        }
+        else if (sucesso != null)
+        {
+            if ((bool)sucesso == true)
+            {
+                <div id="mensagem_alerta" class="alert alert-success" role="alert" style="bottom: 0;margin-left: 8px;position:absolute !important;">
+                    @TempData["Mensagem"];
+                </div>
+            }
+        }
+    }
 
     <div class="limiter">
         <div class="container-login100" style="background-image: linear-gradient(to right, #62a8db , #6cb27c) !important;">
             <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-                @using (Ajax.BeginForm("Registrar", "Account", null, new AjaxOptions() { OnBegin = "Verificar", OnComplete = "OnComplete" }, new { @class = "login100-form validate-form" }))
-                {
+                <form action="/Account/Registrar" method="POST" enctype="multipart/form-data">
                     <span class="login100-form-title p-b-49">
                         Cadastro
                         <img src="~/Content/img/icone_colorido.png" style="width: 50px;" />
                     </span>
-                    
+
                     <div class="wrap-input100 validate-input m-b-23" data-validate="Informe seu email">
                         <span class="label-input100">Email</span>
                         <input class="input100" type="email" id="email" name="email" placeholder="Escreva seu email">
@@ -99,39 +97,30 @@
                     <div class="container-login100-form-btn">
                         <div class="wrap-login100-form-btn">
                             <div class="login100-form-bgbtn"></div>
-                            <button class="login100-form-btn">
+                            <button id="enviar" class="login100-form-btn">
                                 Cadastrar
                             </button>
                         </div>
                     </div>
+                </form>
 
-                    <div class="txt1 text-center p-t-54 p-b-20">
-                        <span>
-                            Ou se cadastre utilizando
-                        </span>
-                    </div>
+                <div class="txt1 text-center p-t-54 p-b-20">
+                    <span>
+                        Ou se cadastre utilizando
+                    </span>
+                </div>
 
-                    <div class="flex-c-m">
-                        <a href="#" class="login100-social-item bg1">
-                            <i class="fa fa-facebook"></i>
-                        </a>
+                <div class="flex-c-m">
+                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
 
-                        <a href="#" class="login100-social-item bg2">
-                            <i class="fa fa-twitter"></i>
-                        </a>
+                <div class="flex-col-c p-t-155" style="text-align: center;">
 
-                        <a href="#" class="login100-social-item bg3">
-                            <i class="fa fa-google"></i>
-                        </a>
-                    </div>
+                    <a href="/Account/" class="txt2">
+                        Já é cadastrado? Faca o login!
+                    </a>
+                </div>
 
-                    <div class="flex-col-c p-t-155">
-
-                        <a href="/Account/" class="txt2">
-                            Já é cadastrado? Faca o login!
-                        </a>
-                    </div>
-                }
             </div>
         </div>
     </div>
@@ -162,24 +151,31 @@
 
 <script>
 
-    function Verificar() {
-        var valido = (document.getElementById("password").value == document.getElementById("passwordCheck").value);
-
-        if (!valido) {
-            alert("Senha não coincidem");
+    document.addEventListener('keypress', function (e) {
+        if (e.which == 13) {
+            document.getElementById("enviar").click();
         }
+    }, false);
 
-        return valido;
-    }
+    function onSignIn(googleUser) {
+        
+        var profile = googleUser.getBasicProfile();
 
-    function OnComplete(response) {
-        var obj = response.responseJSON;
+        $.ajax({
+            url: "@Url.Action("Registrargoogle", "Account")",
+            method: "POST",
+            dataType: "json",
+            data: {
+                "GoogleId": profile.getId(),
+                "Nome": profile.getName(),
+                "Sobrenome": profile.getGivenName(),
+                "Foto": profile.getImageUrl(),
+                "Email": profile.getEmail()
+            }
+        });
 
-        if (obj.Success) {
-            window.location.replace(response.responseJSON.Msg);
-        } else {
-            alert(obj.Msg);
-        }
-    }
+        var id_token = googleUser.getAuthResponse().id_token;
+
+    };
 
 </script>

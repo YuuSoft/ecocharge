@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Senha";
+}
+
+<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+<link href="~/Content/css/ajuda.css" rel="stylesheet" />
+
+<div class="container text-center justify-content-md-center">
+    <div class="col-sm-12" style="margin-top: 3%;">
+        <a href="@Url.Action("Index", "Account")"><h2 style="font-weight: bold;">Esqueceu sua senha?</h2></a>
+    </div>
+
+    <div class="row  text-center justify-content-md-center" style="margin-top: 5%;">
+        <form action="/Account/Senha" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Enviaremos sua senha para o email da conta!</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Coloque seu email">
+            </div>
+            <button type="submit" class="btn btn-primary">Recuperar Senha</button>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    a:hover {
+        text-decoration: none;
+    }
+</style>

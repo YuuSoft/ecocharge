@@ -1,0 +1,207 @@
+﻿
+@{
+    ViewBag.Title = "Ajuda";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>EcoCharge - Ajuda</title>
+
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="icon" type="image/png" href="/Content/images/icons/tomada.ico" />
+    <link rel="stylesheet" href="~/Content/css/ajuda2.css">
+
+</head>
+
+<body>
+
+    <div class="skw-pages" style="font-family: 'Comfortaa', cursive;">
+        <div class="skw-page skw-page-1 active">
+            <div class="skw-page__half skw-page__half--left">
+                <div class="skw-page__skewed" style="background:white;">
+                    <div class="skw-page__content"></div>
+                </div>
+            </div>
+            <div class="skw-page__half skw-page__half--right">
+                <div class="skw-page__skewed" style="background-image: linear-gradient(to right, #62a8db , #6cb27c) !important;">
+                    <div class="skw-page__content">
+                        <h1 class="skw-page__heading">Seja bem-vindo ao EcoCharge!</h1>
+                        <p class="skw-page__description">Você no controle do seu consumo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="skw-page skw-page-2">
+            <div class="skw-page__half skw-page__half--left">
+                <div class="skw-page__skewed" style="background-image: linear-gradient(to right, #4BAFFE , #15DFFE) !important;">
+                    <div class="skw-page__content">
+                        <h2 class="skw-page__heading">Cadastre seu EcoSense</h2>
+                        <p class="skw-page__description">De inicio na aba do EcoSense, cadastre seu serial para poder receber o consumo de seus aparelhos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="skw-page__half skw-page__half--right" >
+                <div class="skw-page__skewed" style="background-color: white;">
+                    <div class="skw-page__content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="skw-page skw-page-3">
+            <div class="skw-page__half skw-page__half--left">
+                <div class="skw-page__skewed" style="background:white;">
+                    <div class="skw-page__content"></div>
+                </div>
+            </div>
+            <div class="skw-page__half skw-page__half--right">
+                <div class="skw-page__skewed" style="background-image: linear-gradient(to right, #4BAFFE , #15DFFE) !important;">
+                    <div class="skw-page__content">
+                        <h2 class="skw-page__heading">Coloque sua Tarifa</h2>
+                        <p class="skw-page__description">Coloque a tarifa da sua região para que podemos calcular o quanto está consumindo em reais</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="skw-page skw-page-4">
+            <div class="skw-page__half skw-page__half--left">
+                <div class="skw-page__skewed" style="background-image: linear-gradient(to right, #4BAFFE , #15DFFE) !important;">
+                    <div class="skw-page__content">
+                        <h2 class="skw-page__heading">Adicione seus comôdos e aparelhos</h2>
+                        <p class="skw-page__description">Pronto você ja está preparado o para monitorar o consumo dos seus aparelhos!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="skw-page__half skw-page__half--right">
+                <div class="skw-page__skewed" style="background-color: white;">
+                    <div class="skw-page__content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="skw-page skw-page-5">
+            <div class="skw-page__half skw-page__half--left">
+                <div class="skw-page__skewed" style="background-color: white;">
+                    <div class="skw-page__content"></div>
+                </div>
+            </div>
+            <div class="skw-page__half skw-page__half--right">
+                <div class="skw-page__skewed" style="background-image: linear-gradient(to right, #4BAFFE , #15DFFE) !important;">
+                    <div class="skw-page__content">
+                        <h2 class="skw-page__heading">Conheça nossas novas funções</h2>
+                        <p class="skw-page__description">
+                            EcoCharge sempre estara em evolução, visite nossas novas funções e amplie o monitoramento do seu consumo.
+                            <div id="buttons">
+                                <a href="/Painel/Index" class="btn blue">Começar</a>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+    <script src="~/Content/js/ajuda.js"></script>
+
+</body>
+
+</html>
+
+<style>
+
+.link {
+  text-decoration: none;
+  color: #55acee;
+  border-bottom: 2px dotted #55acee;
+  transition: .3s;
+  -webkit-transition: .3s;
+  -moz-transition: .3s;
+  -o-transition: .3s;
+  cursor: url(http://cur.cursors-4u.net/symbols/sym-1/sym46.cur), auto;
+}
+
+.link:hover {
+  color: #2ecc71;
+  border-bottom: 2px dotted #2ecc71;
+}
+
+/* button div */
+#buttons {
+  padding-top: 50px;
+  text-align: center;
+}
+
+/* start da css for da buttons */
+.btn {
+  border-radius: 5px;
+  padding: 15px 25px;
+  font-size: 22px;
+  text-decoration: none;
+  margin: 20px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+}
+
+.btn:active {
+  transform: translate(0px, 5px);
+  -webkit-transform: translate(0px, 5px);
+  box-shadow: 0px 1px 0px 0px;
+}
+
+.blue {
+  background-color: #55acee;
+  box-shadow: 0px 5px 0px 0px #3C93D5;
+}
+
+.blue:hover {
+  background-color: #6FC6FF;
+}
+
+.green {
+  background-color: #2ecc71;
+  box-shadow: 0px 5px 0px 0px #15B358;
+}
+
+.green:hover {
+  background-color: #48E68B;
+}
+
+.red {
+  background-color: #e74c3c;
+  box-shadow: 0px 5px 0px 0px #CE3323;
+}
+
+.red:hover {
+  background-color: #FF6656;
+}
+
+.purple {
+  background-color: #9b59b6;
+  box-shadow: 0px 5px 0px 0px #82409D;
+}
+
+.purple:hover {
+  background-color: #B573D0;
+}
+
+.orange {
+  background-color: #e67e22;
+  box-shadow: 0px 5px 0px 0px #CD6509;
+}
+
+.orange:hover {
+  background-color: #FF983C;
+}
+
+.yellow {
+  background-color: #f1c40f;
+  box-shadow: 0px 5px 0px 0px #D8AB00;
+}
+
+.yellow:hover {
+  background-color: #FFDE29;
+}
+
+</style>

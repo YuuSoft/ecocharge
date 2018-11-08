@@ -9,104 +9,97 @@
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12 text-center" style="margin-top: 3%;">
-            <a href="@Url.Action("Index", "Comodo")"><h2>Seus Cômodos</h2></a>
-        </div>
+<div class="container text-center justify-content-md-center">
+    <div class="col-sm-12" style="margin-top: 3%;">
+        <a href="@Url.Action("Index", "Comodo")"><h2 style="font-weight: bold;">Seus Cômodos</h2></a>
     </div>
-    <div class="row">
-        <div class="col-sm-1 col-md-2 col-lg-2"></div>
-        <div class="col-sm-10 col-md-8 col-lg-8 text-right">
-            @using (Html.BeginForm())
-            {
-                @("Procurar Por Nome: ") @Html.TextBox("SearchString", null, new { @class = "" })
-                <button type="submit" class="btn btn-raised btn-primary" value="Pesquisar"><span class="d-none d-md-block d-xl-block">Pesquisar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-search"></i></span></button>
-            }
-        </div>
-        <div class="col-sm-1 col-md-2 col-lg-2"></div>
+    <div class="col-sm-12" align="center" style="padding: 20px;">
+        @using (Html.BeginForm())
+        {
+            <div class="col-sm-4">@("Procurar Por Nome: ")</div>
+            <div class="col-sm-4" style="padding-top:4px;padding-bottom :4px;">@Html.TextBox("SearchString", null, new { @class = "form-control" })</div>
+            <div class="col-sm-4"><button type="submit" class="btn btn-raised btn-primary" value="Pesquisar"><span class="d-none d-md-block d-xl-block">Pesquisar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-search"></i></span></button></div>
+        }
     </div>
-    <div class="row">
-        <div class="col-sm-1 col-md-2 col-lg-2"></div>
-        <div class="col-sm-10 col-md-8 col-lg-8 text-center">
-            <table class="table table-borderless">
-                <thead>
-                    <tr>
-                        <th scope="col">Númeração</th>
-                        <th scope="col"><a href="@Url.Action("Index", "Comodo",new { sortOrder = ViewBag.NameSortParm })">Nome</a></th>
-                        <th scope="col"><button type="button" class="btn btn-raised btn-primary" onclick="openModal()"><span class="d-none d-md-block d-xl-block">Adicionar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-plus"></i></span></button></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (lista != null)
-                    {
-                        int i = 1;
-                        foreach (var comodo in lista)
-                        {
-                            <tr>
-                                <th scope="row">@i</th>
-                                <td>@comodo.Nome</td>
-                                <td>
-                                    <div class="btn-group" style="margin: unset;">
-                                        <button type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="d-none d-md-block d-xl-block">Opções</span>
-                                            <span class="d-block d-md-none d-xl-none"><i class='fa fa-ellipsis-v'></i></span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#" onclick="EditarComodo(@comodo.Id)">Editar Cômodo</a>
-                                            <a class="dropdown-item" href="#" onclick="RemoverComodo(@comodo.Id)">Remover Cômodo</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            i++;
-                        }
-                    }
-                </tbody>
-            </table>
-            <br />
-                Page @(lista.PageCount < lista.PageNumber ? 0 : lista.PageNumber) of @lista.PageCount
 
-                @Html.PagedListPager(lista, page => Url.Action("Index", 
-                    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-        </div>
-        <div class="col-sm-1 col-md-2 col-lg-2"></div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <!-- Modal -->
-            <div class="modal fade" id="modalComodo" tabindex="-1" role="dialog" aria-labelledby="modalComodoLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        @using (Ajax.BeginForm("Cadastrar", "Comodo", null, new AjaxOptions() { OnComplete = "OnComplete" }))
-                        {
-                            <input type="hidden" id="id" name="id" value="0" />
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalComodoLabel">Cadastre um cômodo</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <center>
-                                    <div class="page">
-                                        <div class="page__demo">
-                                            <label class="field a-field a-field_a1 page__field">
-                                                <input class="field__input" placeholder="Cômodo" name="nome" id="nome" required>
-                                                <span class="field__label-wrap">
-                                                    <span class="field__label">Nome do cômodo</span>
-                                                </span>
-                                            </label>
-                                        </div>
+    <div class="col-sm-12">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Númeração</th>
+                    <th scope="col"><a href="@Url.Action("Index", "Comodo",new { sortOrder = ViewBag.NameSortParm })">Nome</a></th>
+                    <th scope="col"><button type="button" class="btn btn-raised btn-primary" onclick="openModal()"><span class="d-none d-md-block d-xl-block">Adicionar</span><span class="d-block d-md-none d-xl-none"><i class="fa fa-plus"></i></span></button></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (lista != null)
+                {
+                    int i = 1;
+                    foreach (var comodo in lista)
+                    {
+                        <tr>
+                            <th scope="row">@i</th>
+                            <td>@comodo.Nome</td>
+                            <td>
+                                <div class="btn-group" style="margin: unset;">
+                                    <button type="button" class="btn btn-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="d-none d-md-block d-xl-block">Opções</span>
+                                        <span class="d-block d-md-none d-xl-none"><i class='fa fa-ellipsis-v'></i></span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" onclick="EditarComodo(@comodo.Id)">Editar Cômodo</a>
+                                        <a class="dropdown-item" href="#" onclick="RemoverComodo(@comodo.Id)">Remover Cômodo</a>
                                     </div>
-                                </center>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="submit" class="btn btn-primary">Salvar</button>
-                            </div>
-                        }
-                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+        <br />
+    </div>
+
+    <div class="col-sm-12">
+        Page @(lista.PageCount < lista.PageNumber ? 0 : lista.PageNumber) of @lista.PageCount
+
+        @Html.PagedListPager(lista, page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+
+    <div class="col-sm-12">
+        <!-- Modal -->
+        <div class="modal fade" id="modalComodo" tabindex="-1" role="dialog" aria-labelledby="modalComodoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="/Comodo/Cadastrar" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" id="id" name="id" value="0" />
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalComodoLabel">Cadastre um cômodo</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <center>
+                                <div class="page">
+                                    <div class="page__demo">
+                                        <label class="field a-field a-field_a1 page__field">
+                                            <input class="field__input" placeholder="Cômodo" name="nome" id="nome" required>
+                                            <span class="field__label-wrap">
+                                                <span class="field__label">Nome do cômodo</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -114,18 +107,6 @@
 </div>
 
 <script>
-
-    function OnComplete(response) {
-        var obj = response.responseJSON;
-
-        alert(obj.Msg);
-
-        if (obj.Success) {
-            $('#modalComodo').modal('hide');
-            window.location = "@Url.Action("Index", "Comodo")";
-        }
-
-    }
 
     function openModal()
     {
@@ -154,8 +135,8 @@
                 url: "@Url.Action("Remover", "Comodo")",
                 data: { id: id},
                 success: function (data) {
-                    alert(data.Msg);
-                    window.location = "@Url.Action("Index", "Comodo")";
+                    //alert(data.Msg);
+                    //window.location = "@Url.Action("Index", "Comodo")";
                 }
             });
         }
@@ -163,3 +144,9 @@
     }
 
 </script>
+
+<style>
+    a:hover {
+        text-decoration: none;
+    }
+</style>

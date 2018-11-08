@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "Usuário";
+}
+
+<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+
+<div class="container justify-content-md-center">
+    <div class="col-sm-12  text-center" style="margin-top: 3%;">
+        <a href="@Url.Action("Index", "Usuario")"><h2 style="font-weight: bold;">Dados do Usuário</h2></a>
+    </div>
+
+    <div class="row justify-content-md-center" style="margin-top: 5%;">
+        <form action="/Usuario/Cadastrar" method="POST" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Nome:</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Fernanda" value="@ViewBag.nome">
+            </div>
+
+            <div class="form-group">
+                <label for="example-text-input">Sobrenome</label>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Oliveira" value="@ViewBag.sobrenome">
+            </div>
+
+            <div class="form-group">
+                <label for="example-email-input">Email</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="fernanda@gmail.com" value="@ViewBag.email">
+            </div>
+
+            <div class="form-group">
+                <label for="example-password-input">Senha</label>
+                <input type="text" class="form-control" id="senha" name="senha" placeholder="123456789" value="@ViewBag.senha">
+            </div>
+
+            <div class="form-group">
+                <label for="example-tel-input">Telefone</label>
+                <input class="form-control" type="tel" id="telefone" name="telefone" placeholder="(55) 55555 5555" value="@ViewBag.telefone">
+            </div>
+
+            <div class="form-group">
+                <label for="example-date-input">Data de nascimento</label>
+                <input class="form-control" type="date" id="DataNascimento" name="DataNascimento" value="@ViewBag.data_de_nascimento">
+            </div>
+
+            <div class="form-group">
+                <label for="example-text-input">Sexo</label>
+                <select class="form-control" id="genero" name="genero" value="@ViewBag.genero">
+                    <option>Masculino</option>
+                    <option>Feminino</option>
+                    <option>Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="example-text-input">Foto do Usuário</label><br />
+                <input id="foti" name="foti" class="form-control" type="file" onchange="encodeImageFileAsURL();" style="margin-bottom: 2%;" />
+                <input type="text" class="form-control d-none" id="foto" name="foto">
+                <div id="imgTest"></div>
+                <img id="fotinea" class="img-thumbnail rounded mx-auto d-block" src="@ViewBag.foto" />
+            </div>
+
+            <div class="form-group">
+                <label for="example-password-input">Quantidade de pessoas que moram/trabalha na sua residência/empresa ?</label>
+                <input type="number" class="form-control" id="QtdePessoasCasa" name="QtdePessoasCasa" placeholder="6" value="@ViewBag.qtde_pessoas_na_casa">
+            </div>
+
+            <div class="form-group">
+                <label for="example-text-input">Qual comodo acredita que consome mais energia elétrica ?</label>
+                <input type="text" class="form-control" id="Qualcomodomaisgasta" name="Qualcomodomaisgasta" placeholder="Sala" value="@ViewBag.qual_comodo_mais_gasta">
+            </div>
+
+            <div class="form-group">
+                <label for="example-text-input">Valor médio da sua conta de luz?</label>
+                <input type="text" class="form-control" id="ValorContaLuz" name="ValorContaLuz" placeholder="250,00" value="@ViewBag.valor_conta_luz">
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<style>
+    a:hover {
+        text-decoration: none;
+    }
+</style>
+
+<script type='text/javascript'>
+    function encodeImageFileAsURL() {
+
+        var filesSelected = document.getElementById("foti").files;
+        if (filesSelected.length > 0) {
+            var fileToLoad = filesSelected[0];
+
+            var fileReader = new FileReader();
+
+            fileReader.onload = function (fileLoadedEvent) {
+                var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+                var newImage = document.createElement('img');
+                newImage.src = srcData;
+                newImage.className = "img-thumbnail rounded mx-auto d-block";
+                document.getElementById("foto").value = srcData;
+
+                document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                document.getElementById("fotinea").remove();
+
+            }
+            
+            fileReader.readAsDataURL(fileToLoad);
+        }
+    }
+</script>

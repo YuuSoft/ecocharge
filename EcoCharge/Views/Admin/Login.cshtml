@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+</head>
+
+<body class="text-center">
+    <div class="text-center" style="  margin: 100px auto; width: 400px;">
+        <form class="form-signin" method="post" enctype="multipart/form-data" action="/Admin/Login">
+            <img class="mb-4" src="~/Content/img/icone_colorido.png" alt="" width="97" height="123">
+            <h1 class="h3 mb-3 font-weight-normal">Painel Administrativo</h1>
+            <label for="inputUser" class="sr-only">Usuário</label>
+            <input type="text" id="inputUser" name="usuario" class="form-control" placeholder="Usuário" required autofocus>
+            <p class="p-0"></p>
+            <label for="inputPassword" class="sr-only">Senha</label>
+            <input type="password" id="inputPassword" name="senha" class="form-control" placeholder="Senha" required>
+            <p class="p-1"></p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+        </form>
+    </div>
+
+    @{
+        var erro = TempData["Erro"];
+        var sucesso = TempData["Sucesso"];
+
+        if (erro != null)
+        {
+            if ((bool)erro == true)
+            {
+                <div id="mensagem_alerta" class="alert alert-danger" role="alert" style="bottom: 0;margin-left: 8px;position:absolute !important;">
+                    @TempData["Mensagem"]
+                </div>
+            }
+        }
+        if (sucesso != null)
+        {
+            if ((bool)sucesso == true)
+            {
+                <div id="mensagem_alerta" class="alert alert-success" role="alert" style="bottom: 0;margin-left: 8px;position:absolute !important;">
+                    @TempData["Mensagem"]
+                </div>
+            }
+        }
+    }
+
+    <script>
+        $(document).ready(function () {
+            var alerta = document.getElementById("mensagem_alerta");
+
+            if (alerta != null) {
+                setTimeout(function () {
+                    $(alerta).fadeOut(500);
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>
