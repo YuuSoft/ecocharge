@@ -17,32 +17,77 @@ namespace BLL.Filter
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (HttpContext.Current.Session["UserLogado"] != null)
-                if (Convert.ToBoolean(HttpContext.Current.Session["UserLogado"]) == true)
+            string controller = (filterContext.RouteData.Values["controller"] as string);
+            string action = (filterContext.RouteData.Values["action"] as string);
+            bool userLogado = HttpContext.Current.Session["UserLogado"] != null ? (bool)HttpContext.Current.Session["UserLogado"] : false;
+            bool adminLogado = HttpContext.Current.Session["AdminLogado"] != null ? (bool)HttpContext.Current.Session["AdminLogado"] : false;
+
+            if (adminLogado)
+            {
+                //Sem Filtro
+            }
+            else if (userLogado)
+            {
+                if (controller == "Admin")
                 {
-                    Log(filterContext.RouteData);
+                    if (action == "Index" || action == "Login")
+                    {
+                        //pode
+                    }
+                    else
+                    {
+                        filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        this.RedirectToRoute(filterContext, new { controller = "Admin", action = "Login" });
+                    }
                 } else
                 {
-                    //não é pra cair aqui mas ta aqui ne. SÓ PRA TE MESMO
+                    //pode
                 }
+            }
             else
             {
-                if(!((filterContext.RouteData.Values["controller"] as string).Equals("Account") || 
-                   (filterContext.RouteData.Values["controller"] as string).Equals("Home") ||
-                   (filterContext.RouteData.Values["controller"] as string).Equals("Error")))
+                if ((controller != "Account" && controller != "Home" && controller != "Error"))
                 {
-                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-                    this.RedirectToRoute(filterContext, new { controller = "Error", action = "NotAllowed" });
+                    if (controller == "Admin")
+                    {
+                        if (action == "Index" || action == "Login")
+                        {
+                            //pode
+                        } else
+                        {
+                            filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                            this.RedirectToRoute(filterContext, new { controller = "Admin", action = "Login" });
+                        }
+                    } else
+                    {
+                        filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                        this.RedirectToRoute(filterContext, new { controller = "Error", action = "NotAllowed" });
+                    }
                 }
             }
 
-            //Caso alguem tente acessar as páginas de error, redireciona para a pagina de erro 404.
-            //if ((filterContext.RouteData.Values["controller"] as string).Equals("Error") &&
-            //    !(filterContext.RouteData.Values["action"] as string).Equals("NotFound")) {
-            //    this.RedirectToRoute(filterContext, new { controller = "Error", action = "NotFound" });
-            //}
 
-            //Regitra no log a atvidade do usuario, futuramente colocar o email do usuario junto.
+            //if (HttpContext.Current.Session["UserLogado"] != null || )
+            //    if (Convert.ToBoolean(HttpContext.Current.Session["UserLogado"]) == true)
+            //    {
+            //        Log(filterContext.RouteData);
+
+            //        if ()
+            //    }
+            //else
+            //{
+            //    if (!(controller.Equals("Account") ||
+            //       controller.Equals("Home") ||
+            //       controller.Equals("Error")) ||
+            //       !(controller.Equals("Admin") && (action.Equals("Login")) || action.Equals("Index")))
+            //        {
+
+            //    } else
+            //    {
+            //        filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+            //        this.RedirectToRoute(filterContext, new { controller = "Error", action = "NotAllowed" });
+            //    }
+            //}
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -83,7 +128,7 @@ namespace BLL.Filter
             {
                 log = service.Save(log);
 
-                var message = String.Format("Controller: {0}, Ação: {1}, Email: {2}", log.Acao, log.Controlador, log.Email);
+                var message = String.Format("Controller: {0}, Ação: {1}, Email: {2}, Ip: {3}", log.Acao, log.Controlador, log.Email, log.Ip);
 
                 Debug.WriteLine(message, "Filtro de Ação");
             }
