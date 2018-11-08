@@ -62,70 +62,58 @@ namespace EcoCharge.Controllers
                     }
                 }
 
-                ViewData["ListaEcoSense"] = lista;
+                Session["ListaEcoSense"] = lista;
             }
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Cadastrar(EcoSense model)
+        public JsonResult Cadastrar(EcoSense model)
         {
-            var success = true;
-            var msg = string.Empty;
-
-            if (model.SerialAparelho != null)
+            try
             {
-                if (model.SerialAparelho.Serial != null)
+                if (model == null)
+                    throw new Exception("Preencha o serial");
+
+                if (model.SerialAparelho == null)
+                    throw new Exception("Preencha o serial");
+
+                using (var service = new Service<EcoSense>())
+                using (var serviceSerial = new Service<SerialAparelho>())
                 {
-                    using (var service = new Service<EcoSense>())
-                    using (var serviceSerial = new Service<SerialAparelho>())
-                    {
-                        try
-                        {
-                            var userId = Convert.ToInt32(Session["UserId"]);
-                            model.UsuarioId = userId;
-                            model.StatusAparelho = false;
+                    var userId = Convert.ToInt32(Session["UserId"]);
+                    model.UsuarioId = userId;
+                    model.Ativo = false;
 
-                            var serial = serviceSerial.GetRepository().Where(s => s.Serial.Equals(model.SerialAparelho.Serial)).FirstOrDefault();
+                    var serial = serviceSerial.GetRepository().Where(s => s.Serial.Equals(model.SerialAparelho.Serial)).FirstOrDefault();
 
-                            if (serial != null)
-                            {
-                                var list = service.GetRepository().ToList().Where(es => es.SerialAparelho.Equals(serial));
+                    if (serial == null)
+                        throw new Exception("Serial não existe/incorreto");
+                    
+                    var list = service.GetRepository().ToList().Where(es => es.SerialAparelho.Serial.Equals(serial.Serial));
 
-                                if (list.ToList().Count() == 0)
-                                {
-                                    if (model.Id == 0)
-                                        service.Save(model);
-                                }
-                                else
-                                    throw new Exception("Este serial ja foi cadastrado por outra pessoa.");
-                            }
-                            else
-                                throw new Exception("Serial não existe/incorreto");
+                    if (list.ToList().Count() != 0)
+                        throw new Exception("Este serial ja foi cadastrado por outra pessoa.");
 
-                            msg = "Serial " + model.SerialAparelho.Serial + " cadastrado com sucesso";
-                        }
-                        catch (Exception ex)
-                        {
-                            success = false;
-                            msg = ex.Message;
-                        }
-                    }
-                }
-                else
-                {
-                    success = false;
-                    msg = "Preencha o serial";
+                    if (model.Id == 0)
+                        service.Save(model);
+
+
+                    TempData["Sucesso"] = true;
+                    TempData["Mensagem"] = "Serial " + model.SerialAparelho.Serial + " cadastrado com sucesso";
                 }
             }
-            else
+            catch (Exception exception)
             {
-                success = false;
-                msg = "Preencha o serial";
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
             }
 
-            return Json(new { Success = success, Msg = msg }, "application/json", JsonRequestBehavior.AllowGet);
+            var view = RedirectToAction("Index");
+            view.ExecuteResult(ControllerContext);
+
+            return null;
         }
     }
 }

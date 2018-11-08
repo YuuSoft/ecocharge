@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+
     [Table("usuario")]
     public class Usuario : AbstractEntity
     {
@@ -46,13 +47,41 @@ namespace Models
         [Column("tarifa")]
         public decimal Tarifa { get; set; }
 
+        [Column("telefone")]
+        [MaxLength(24)]
+        public string Telefone { get; set; }
+
+        [Column("genero")]
+        [MaxLength(20)]
+        public string Genero { get; set; }
+
+        [Column("data_de_nascimento ")]
+        public DateTime DataNascimento { get; set; }
+
+        [Column("localizacao")]
+        [MaxLength(60)]
+        public string Localizacao { get; set; }
+
+        [Column("foto")]
+        public string Foto { get; set; }
+
+        [Column("qtde_pessoas_na_casa")]
+        public int QtdePessoasCasa { get; set; }
+
+        [Column("qual_comodo_mais_gasta")]
+        public string Qualcomodomaisgasta { get; set; }
+
+        [Column("valor_da_conta_de_luz")]
+        public decimal ValorContaLuz { get; set; }
+
+        [InverseProperty("Usuario")]
+        public virtual IList<Agendamento> Agendamentos { get; set; }
+
         [InverseProperty("Usuario")]
         public virtual IList<Comodo> Comodos { get; set; }
 
         [InverseProperty("Usuario")]
         public virtual IList<EcoSense> EcoSenses { get; set; }
-
-        [InverseProperty("Usuario")]
-        public virtual IList<Agendamento> Agendamentos { get; set; }
+        public int UsuarioId { get; internal set; }
     }
 }

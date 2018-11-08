@@ -21,7 +21,8 @@ namespace EcoCharge.Controllers
 
         public ActionResult NotAllowed(string aspxerrorpath)
         {
-            return View("NotFound");
+            Response.StatusCode = 403;
+            return View("NotAccess");
         }
     }
 }

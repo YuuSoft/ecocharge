@@ -20,8 +20,5 @@ namespace Models
         [Column("serial")]
         [MaxLength(12)]
         public string Serial { get; set; }
-
-        [InverseProperty("SerialAparelho")]
-        public virtual IList<EcoSense> EcoSenses { get; set; }
     }
 }

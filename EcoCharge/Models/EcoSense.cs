@@ -27,10 +27,13 @@ namespace Models
         public int UsuarioId { get; set; }
         public virtual Usuario Usuario { get; set; }
 
-        [Column("status_aparelho")]
-        public bool StatusAparelho { get; set; }
+        [Column("ativo")]
+        public bool Ativo { get; set; }
 
         [InverseProperty("EcoSense")]
         public virtual IList<Agendamento> Agendamentos { get; set; }
+
+        [InverseProperty("EcoSense")]
+        public virtual IList<Aparelho> Aparelhos { get; set; }
     }
 }

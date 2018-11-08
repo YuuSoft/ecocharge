@@ -3,7 +3,9 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace EcoCharge.Controllers
@@ -17,18 +19,23 @@ namespace EcoCharge.Controllers
         }
 
         [HttpGet]
-        public ActionResult Cadastro() {
+        public ActionResult Cadastro()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Senha()
+        {
             return View();
         }
 
         [HttpPost]
         public ActionResult Logar(Login model)
         {
-            bool success = true;
-            string msg = string.Empty;
-
-            if (ModelState.IsValid)
+            try
             {
+
                 using (var service = new Service<Usuario>())
                 {
                     var user = service.GetRepository().Where(u => u.Email == model.email && u.Senha == model.password).FirstOrDefault();
@@ -36,120 +43,165 @@ namespace EcoCharge.Controllers
 
                     if (!exists)
                     {
-                        success = false;
-                        msg = "Email ou senha incorreto";
+                        throw new Exception("Email ou senha incorreto");
                     }
                     else
                     {
                         Session["UserLogado"] = true;
                         Session["UserEmail"] = user.Email;
+                        Session["UserNome"] = user.Nome;
+                        Session["UserSobrenome"] = user.Sobrenome;
+                        Session["UserSpace"] = " ";
+                        Session["UserFoto"] = user.Foto;
                         Session["UserId"] = user.Id;
-                        
-                        msg = "/";
                     }
                 }
-            } else
-            {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                                           .Where(y => y.Count > 0)
-                                           .FirstOrDefault();
 
-                success = false;
-                msg = errors.ElementAt(0).ErrorMessage;
+                TempData["Sucesso"] = true;
+                TempData["Mensagem"] = "Seja Bem Vindo " + model.email;
+
+                var view = RedirectToAction("Index", "Painel");
+                view.ExecuteResult(ControllerContext);
+
             }
-            
-            Response.StatusCode = 200;
-            return Json(new { Success = success, Msg = msg}, "application/json", JsonRequestBehavior.AllowGet);
+            catch (Exception exception)
+            {
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
+
+                var view = RedirectToAction("Index");
+                view.ExecuteResult(ControllerContext);
+            }
+
+            return null;
         }
 
         [HttpPost]
         public ActionResult Deslogar()
         {
-            bool success = true;
-            string msg = string.Empty;
+            try {
+                if (Session["UserLogado"] != null)
+                {
+                    Session["UserLogado"] = false;
+                    Session["UserEmail"] = null;
+                    Session["UserId"] = null;
+                    Session["UserNome"] = null;
+                    Session["UserSobrenome"] = null;
+                    Session["UserFoto"] = null;
 
-            if (Session["UserLogado"] != null)
+                }
+
+                TempData["Sucesso"] = true;
+                TempData["Mensagem"] = "Usuario Deslogado";
+            }
+            catch (Exception exception)
             {
-                Session["UserLogado"] = null;
-                Session["UserEmail"] = null;
-                Session["UserId"] = null;
-
-                msg = "Deslogado com sucesso";
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
             }
 
-            Response.StatusCode = 200;
-            return Json(new { Success = success, Msg = msg }, "application/json", JsonRequestBehavior.AllowGet);
+            var view = RedirectToAction("Index");
+            view.ExecuteResult(ControllerContext);
+
+            return null;
+
+
         }
 
         [HttpPost]
         public ActionResult Registrar(Login model, string passwordCheck)
         {
-            bool success = true;
-            string msg = string.Empty;
+            try
+            {
 
-            if (ModelState.IsValid) {
                 if (!model.password.Equals(passwordCheck))
-                {
-                    success = false;
-                    msg = "As senhas não são iguais";
-                }
-                else if (model.password.Length < 8)
-                {
-                    success = false;
-                    msg = "Senha deve ter no minimo 8 caracteres";
-                }
-                else {
-                    try
-                    {
-                        var addr = new System.Net.Mail.MailAddress(model.email);
-                        var b = addr.Address == model.email;
-                    }
-                    catch
-                    {
-                        success = false;
-                        msg = "Email invalido";
-                    }
-                }
-            }
-            else {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                                           .Where(y => y.Count > 0)
-                                           .FirstOrDefault();
+                    throw new Exception("As senhas não são iguais");
 
-                success = false;
-                msg = errors.ElementAt(0).ErrorMessage;
-            }
+                if (model.password.Length < 8)
+                    throw new Exception("Senha deve ter no minimo 8 caracteres");
 
-            if (success)
+                var addr = new System.Net.Mail.MailAddress(model.email);
+                var b = addr.Address == model.email;
+
                 using (var service = new Service<Usuario>())
                 {
                     bool exists = service.GetRepository().Where(u => u.Email == model.email).FirstOrDefault() != null;
 
                     if (exists)
-                    {
-                        success = false;
-                        msg = "Já existe um usuário com este email";
-                    }
-                    else
-                    {
-                        Usuario user = new Usuario();
-                        user.Email = model.email;
-                        user.Senha = model.password;
+                        throw new Exception("Já existe um usuário com este email");
 
-                        try {
-                            service.Save(user);
+                    Usuario user = new Usuario();
+                    user.Email = model.email;
+                    user.Senha = model.password;
 
-                            msg = "/Account/";
-                        } catch (Exception ex)
-                        {
-                            success = false;
-                            msg = ex.Message;
-                        }
+                    service.Save(user);
+
+                }
+
+                TempData["Sucesso"] = true;
+                TempData["Mensagem"] = "Usuário Cadastrado com Sucesso: " + model.email + " !";
+
+                var view = RedirectToAction("Index");
+                view.ExecuteResult(ControllerContext);
+
+            }
+            catch (Exception exception)
+            {
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
+
+                var view = RedirectToAction("Cadastro");
+                view.ExecuteResult(ControllerContext);
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult Senha(string email)
+        {
+            try
+            {
+
+                if (email == null)
+                    throw new Exception("Preencha o campo email");
+
+                if (email == "")
+                    throw new Exception("Preencha o campo email");
+
+                using (var service = new Service<Usuario>())
+                {
+                    var y = service.GetRepository().Where(x => x.Email == email).ToList();
+                    if (y.Count > 0)
+                    {
+                        MailMessage mail = new MailMessage("kkaio.rocha64@gmail.com", email);
+                        SmtpClient client = new SmtpClient();
+                        client.Port = 587;
+                        client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        client.UseDefaultCredentials = false;
+                        client.Host = "smtp.gmail.com";
+                        mail.Subject = "EcoCharge - Sua Senha";
+                        mail.Body = "Senha para LOGIN - " + y.First().Senha;
+                        client.Send(mail);
+
                     }
                 }
 
-            Response.StatusCode = 200;
-            return Json(new { Success = success, Msg = msg }, "application/json", JsonRequestBehavior.AllowGet);
+                TempData["Sucesso"] = true;
+                TempData["Mensagem"] = "Senha enviada com sucesso para o email: " + email + " !";
+
+            }
+            catch (Exception exception)
+            {
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
+            }
+
+            var view = RedirectToAction("Senha");
+            view.ExecuteResult(ControllerContext);
+
+            return null;
         }
     }
+
 }

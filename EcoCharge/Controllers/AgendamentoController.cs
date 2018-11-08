@@ -9,9 +9,9 @@ using System.Web.Mvc;
 
 namespace EcoCharge.Controllers
 {
-    public class AparelhoController : BaseController
+    public class AgendamentoController : Controller
     {
-        // GET: Aparelho
+        // GET: Agendamento
         public ActionResult Index(string sortOrder, string searchString, string currentFilter, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -28,80 +28,63 @@ namespace EcoCharge.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            using (var service = new Service<Aparelho>())
+            using (var service = new Service<Agendamento>())
             {
                 int id = (int)Session["UserId"];
 
-                var aparelhos = service.GetRepository().Where(c => c.UsuarioId.Equals(id));
+                var agemdamentos = service.GetRepository().Where(c => c.UsuarioId.Equals(id));
 
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    aparelhos = aparelhos.Where(s => s.Nome.Contains(searchString));
+                    agemdamentos = agemdamentos.Where(s => s.Detalhes.Contains(searchString));
                 }
 
                 switch (sortOrder)
                 {
                     case "name_desc":
-                        aparelhos = aparelhos.OrderByDescending(s => s.Nome);
+                        agemdamentos = agemdamentos.OrderByDescending(s => s.Detalhes);
                         break;
                     default:
-                        aparelhos = aparelhos.OrderBy(s => s.Nome);
+                        agemdamentos = agemdamentos.OrderBy(s => s.Detalhes);
                         break;
                 }
 
                 int pageSize = 5;
                 int pageNumber = (page ?? 1);
 
-                var lista = aparelhos.ToPagedList(pageNumber, pageSize);
+                var lista = agemdamentos.ToPagedList(pageNumber, pageSize);
 
-                ViewData["ListaAparelho"] = lista;
+                ViewData["ListaAgendamentos"] = lista;
             }
 
             using (var service = new Service<EcoSense>())
-            using (var serviceComodo = new Service<Comodo>())
             {
                 int id = (int)Session["UserId"];
 
-                var lista = service.GetRepository().Where(k=>k.UsuarioId == id).ToList();
+                var lista = service.GetRepository().Where(k => k.UsuarioId == id).ToList();
 
                 ViewBag.ListaEcoSense = lista;
 
-                var listaComodo = serviceComodo.GetRepository().Where(k => k.UsuarioId == id).ToList();
-
-                ViewBag.ListaComodo = listaComodo;
-
-                var view = View("Index");
-                view.ExecuteResult(ControllerContext);
             }
 
-            return null;
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Cadastrar(Aparelho model)
+        public ActionResult Cadastrar(Agendamento model,String inicio, String final, String segunda)
         {
+
             try
             {
 
-                if (model.Nome == null)
-                    throw new Exception("Preencha o nome do aparelho");
-
-                if (model.Descricao == null)
-                    throw new Exception("Preencha a descrição do aparelho");
-
-                if (model.Voltagem == 0)
-                    throw new Exception("Preencha a voltagem do aparelho");
-
+                if (model == null)
+                    throw new Exception("Preencha o dados");
                 if (model.EcoSenseId == 0)
-                    throw new Exception("Escolha o EcoSense do aparelho");
+                    throw new Exception("Preencha o EcoSense");
+                if (model.Detalhes == null)
+                    throw new Exception("Preencha os Detalhes");
 
-                if (model.ComodoId == 0)
-                    throw new Exception("Escolha o cômodo do aparelho");
-
-                if (model.Cor == null)
-                    throw new Exception("Preencha a cor do aparelho");
-
-                using (var service = new Service<Aparelho>())
+                using (var service = new Service<Agendamento>())
                 {
                     var userId = Convert.ToInt32(Session["UserId"]);
                     model.UsuarioId = userId;
@@ -110,7 +93,7 @@ namespace EcoCharge.Controllers
                 }
 
                 TempData["Sucesso"] = true;
-                TempData["Mensagem"] = "Aparelho " + model.Nome + " cadastrado com sucesso";
+                TempData["Mensagem"] = "Agendamento cadastrado com sucesso";
 
             }
             catch (Exception exception)
@@ -129,30 +112,20 @@ namespace EcoCharge.Controllers
         public ActionResult Editar(int? id)
         {
             var success = true;
-            var nome = string.Empty;
-            var descricao = string.Empty;
-            var voltagem = 0;
+            var detalhes = string.Empty;
             var ecosenseid = 0;
-            var comodoid = 0;
-            var cor = string.Empty;
 
             if (id != null && id != 0)
             {
-                using (var service = new Service<Aparelho>())
+                using (var service = new Service<Agendamento>())
                 {
                     var userId = Convert.ToInt32(Session["UserId"]);
-                    var model = service.GetRepository().Where(aparelho => aparelho.UsuarioId == userId && aparelho.Id == id).FirstOrDefault();
+                    var model = service.GetRepository().Where(agendamento => agendamento.UsuarioId == userId && agendamento.Id == id).FirstOrDefault();
 
                     if (model != null)
                     {
-             
-                        nome = model.Nome;
-                        descricao = model.Descricao;
-                        voltagem = model.Voltagem;
+                        detalhes = model.Detalhes;
                         ecosenseid = model.EcoSenseId;
-                        comodoid = model.ComodoId;
-                        cor = model.Cor;
-
                     }
                     else
                     {
@@ -161,7 +134,7 @@ namespace EcoCharge.Controllers
                 }
             }
 
-            return Json(new { Success = success, Id = id, Nome = nome, Descricao = descricao, Voltagem = voltagem, Ecosenseid = ecosenseid, Comodoid = comodoid, Cor = cor}, "application/json", JsonRequestBehavior.AllowGet);
+            return Json(new { Success = success, Id = id, Detalhes = detalhes }, "application/json", JsonRequestBehavior.AllowGet);
         }
 
         [HttpDelete]
@@ -169,21 +142,21 @@ namespace EcoCharge.Controllers
         {
             try
             {
-                using (var service = new Service<Aparelho>())
+                using (var service = new Service<Comodo>())
                 {
                     if (id != null && id != 0)
                         throw new Exception("Informe o id!");
 
                     var userId = Convert.ToInt32(Session["UserId"]);
-                    var model = service.GetRepository().Where(aparelho => aparelho.UsuarioId == userId && aparelho.Id == id).FirstOrDefault();
+                    var model = service.GetRepository().Where(agendamento => agendamento.UsuarioId == userId && agendamento.Id == id).FirstOrDefault();
 
                     if (model == null)
-                        throw new Exception("O aparelho não existe!");
+                        throw new Exception("Esse agendamento não existe!");
 
                     service.Delete(model);
 
                     TempData["Sucesso"] = true;
-                    TempData["Mensagem"] = "Aparelho removido com sucesso";
+                    TempData["Mensagem"] = "Agendamento removido com sucesso";
                 }
             }
             catch (Exception exception)
@@ -197,5 +170,6 @@ namespace EcoCharge.Controllers
 
             return null;
         }
+
     }
 }

@@ -62,36 +62,36 @@ namespace EcoCharge.Controllers
         [HttpPost]
         public ActionResult Cadastrar(Comodo model)
         {
-            var success = true;
-            var msg = string.Empty;
 
-            if (ModelState.IsValid)
-            {
+            try {
+
+                if (model == null)
+                    throw new Exception("Preencha o nome do cômodo");
+
+                if (model.Nome == null)
+                    throw new Exception("Preencha o nome do cômodo");
+
                 using (var service = new Service<Comodo>())
                 {
-                    try
-                    {
-                        var userId = Convert.ToInt32(Session["UserId"]);
-                        model.UsuarioId = userId;
+                    var userId = Convert.ToInt32(Session["UserId"]);
+                    model.UsuarioId = userId;
 
-                        service.Save(model);
-
-                        msg = model.Nome + " cadastrado com sucesso";
-                    }
-                    catch (Exception ex)
-                    {
-                        success = false;
-                        msg = ex.Message;
-                    }
+                    service.Save(model);
                 }
+
+                TempData["Sucesso"] = true;
+                TempData["Mensagem"] = "Comodo " + model.Nome + " cadastrado com sucesso";
+
             }
-            else
-            {
-                success = false;
-                msg = "Preencha o nome do cômodo";
+            catch (Exception exception) {
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
             }
 
-            return Json(new { Success = success, Msg = msg }, "application/json", JsonRequestBehavior.AllowGet);
+            var view = RedirectToAction("Index");
+            view.ExecuteResult(ControllerContext);
+
+            return null;
         }
 
         [HttpGet]
@@ -110,7 +110,8 @@ namespace EcoCharge.Controllers
                     if (model != null)
                     {
                         nome = model.Nome;
-                    } else
+                    }
+                    else
                     {
                         success = false;
                     }
@@ -123,39 +124,35 @@ namespace EcoCharge.Controllers
         [HttpDelete]
         public ActionResult Remover(int? id)
         {
-            var success = true;
-            var msg = string.Empty;
-
-            if (id != null && id != 0)
+            try
             {
                 using (var service = new Service<Comodo>())
                 {
-                    try
-                    {
-                        var userId = Convert.ToInt32(Session["UserId"]);
-                        var model = service.GetRepository().Where(comodo => comodo.UsuarioId == userId && comodo.Id == id).FirstOrDefault();
+                    if (id != null && id != 0)
+                        throw new Exception("Informe o id!");
 
-                        if (model != null)
-                        {
-                            model = service.FindById(model);
-                            service.Delete(model);
-                            msg = "Removido com sucesso";
-                        }
-                        else
-                        {
-                            msg = "Esse comodo não existe";
-                            success = false;
-                        }
-                    } catch (Exception ex)
-                    {
-                        success = false;
-                        msg = ex.Message;
-                    }
+                    var userId = Convert.ToInt32(Session["UserId"]);
+                    var model = service.GetRepository().Where(comodo => comodo.UsuarioId == userId && comodo.Id == id).FirstOrDefault();
 
+                    if (model == null)
+                        throw new Exception("Esse cômodo não existe!");
+
+                    service.Delete(model);
+
+                    TempData["Sucesso"] = true;
+                    TempData["Mensagem"] = "Comodo removido com sucesso";
                 }
             }
+            catch (Exception exception)
+            {
+                TempData["Erro"] = true;
+                TempData["Mensagem"] = exception.Message;
+            }
 
-            return Json(new { Success = success, Msg = msg }, "application/json", JsonRequestBehavior.AllowGet);
+            var view = RedirectToAction("Index");
+            view.ExecuteResult(ControllerContext);
+
+            return null;
         }
     }
 }

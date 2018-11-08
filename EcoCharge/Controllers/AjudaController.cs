@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace EcoCharge.Controllers
 {
-    public class PainelController : BaseController
+    public class AjudaController : Controller
     {
-        // GET: Painel
+        // GET: Ajuda
         public ActionResult Index()
         {
             return View();

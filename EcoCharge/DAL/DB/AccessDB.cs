@@ -33,7 +33,8 @@ namespace DAL.DB
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("public");
+            modelBuilder.Entity<Usuario>().Property(u => u.Tarifa).HasPrecision(16, 8);
             base.OnModelCreating(modelBuilder);
         }
     }
-}
+}           

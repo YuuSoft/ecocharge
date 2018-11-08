@@ -18,6 +18,13 @@ namespace Models
         }
 
         [Required]
+        [Column("nome")]
+        public String Nome { get; set; }
+
+        [Column("descricao")]
+        public String Descricao { get; set; }
+
+        [Required]
         [Column("voltagem")]
         public int Voltagem { get; set; }
 
@@ -25,6 +32,15 @@ namespace Models
         [Column("cor")]
         [MaxLength(7)]
         public string Cor { get; set; }
+
+        [Column("ativo")]
+        public bool Ativo { get; set; }
+
+        [Required]
+        [Column("usuario_id")]
+        [ForeignKey("Usuario")]
+        public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
 
         [Required]
         [ForeignKey("EcoSense")]
